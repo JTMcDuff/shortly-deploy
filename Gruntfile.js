@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       },
       dist: {
         src: ['public/client/*.js'],
-        dest: 'dest/app.js',
+        dest: 'dest/app.js'
       },
 
     },
@@ -42,7 +42,6 @@ module.exports = function(grunt) {
     eslint: {
       target: [
         'public/client/*.js'
-        // Add list of files to lint here
       ]
     },
 
@@ -68,6 +67,7 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+        command: 'git add . ; git commit -m "commited"; git push live head;',
       }
     },
   });
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('deploy', [
-    'eslint',
+    'build', 'shell:prodServer'
 
   ]);
 
