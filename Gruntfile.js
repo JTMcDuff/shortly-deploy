@@ -120,10 +120,16 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', [
-    'test',
-    'build',
-    'shell:prodServer'
-  ]);
+  grunt.registerTask('deploy', function(n) {
+    if (grunt.option('prod')) {
+      grunt.task.run([ 'test',
+        'build',
+        'shell:prodServer']);
+    } else {
+      grunt.task.run([ 'test',
+        'build',
+        'server-dev']);
+    }
+  });
 
 };
