@@ -82,6 +82,22 @@ module.exports = function(grunt) {
         command: 'git add . ; git commit -m "commited"; git push live head;',
       }
     },
+
+    deploy: {
+      liveservers: {
+        options:{
+          servers: [{
+            host: '107.170.37.59',
+            port: 22,
+            username: 'root',
+            password: 'root'
+          }],
+          cmds_before_deploy: [ " echo grunt-test, grunt-build " ],
+          cmds_after_deploy: ['grunt-nodemon'],
+          deploy_path: '/home/project/testdeploy'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -92,6 +108,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-deploy');
 
   grunt.registerTask('server-dev', function (target) {
     grunt.task.run([ 'nodemon', 'watch' ]);
@@ -120,7 +137,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('deploy', function(n) {
+  grunt.registerTask('old-deploy', function(n) {
     if (grunt.option('prod')) {
       grunt.task.run([ 'test',
         'build',
