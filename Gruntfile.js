@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
     concat: {
       options: {
         separator: '\n',
@@ -10,6 +11,10 @@ module.exports = function(grunt) {
         src: ['public/client/*.js'],
         dest: 'dest/app.js'
       },
+      vendor: {
+        src: ['public/lib/*.js'],
+        dest: 'dest/vendor.js'
+      }
 
     },
 
@@ -34,7 +39,8 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'dest/app.min.js': ['dest/app.js']
+          'dest/app.min.js': ['dest/app.js'],
+          'dest/vendor.min.js': ['dest/vendor.js']
         }
       }
     },
@@ -46,6 +52,11 @@ module.exports = function(grunt) {
     },
 
     cssmin: {
+      target: {
+        files: {
+      'dest/style.css': ['public/style.css']
+    }
+  }
     },
 
     watch: {
@@ -55,7 +66,8 @@ module.exports = function(grunt) {
           'public/lib/**/*.js',
         ],
         tasks: [
-          'concat',
+          'concat:dist',
+          'concat:vendor',
           'uglify'
         ]
       },
@@ -93,7 +105,7 @@ module.exports = function(grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', ['eslint','concat', 'uglify']);
+  grunt.registerTask('build', ['eslint','concat:dist', 'concat:vendor', 'uglify', 'cssmin']);
 
   grunt.registerTask('default', [
     'server-dev'
@@ -102,15 +114,16 @@ module.exports = function(grunt) {
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
       // add your production server task here
+      console.log('prod prod prod')
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
   });
 
   grunt.registerTask('deploy', [
-    'build', 'shell:prodServer'
-
+    'test',
+    'build',
+    'shell:prodServer'
   ]);
-
 
 };
