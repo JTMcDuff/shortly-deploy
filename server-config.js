@@ -14,7 +14,11 @@ app.set('view engine', 'ejs');
 app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
+if (process.env.NODE_ENV === 'development'){
+  app.use(express.static(__dirname + '/public'));
+} else {
+  app.use(express.static(__dirname + '/dest'));
+}
 app.use(cookieParser('shhhh, very secret'));
 app.use(session({
   secret: 'shhh, it\'s a secret',
